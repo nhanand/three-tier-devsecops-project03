@@ -61,7 +61,7 @@ pipeline {
                     dir('app-code/backend') {
                             sh 'docker system prune -f'
                             sh 'docker container prune -f'  # NR already deleted by prev command
-                            sh 'docker build -t ${AWS_ECR_REPO_NAME} .
+                            sh 'docker build -t ${AWS_ECR_REPO_NAME} .'
                     }
                 }
             }
