@@ -22,25 +22,21 @@ pipeline {
                 git branch: 'main', credentialsId: 'GITHUB', url: 'https://github.com/codewithmuh/three-tier-devsecops-project.git'
             }
         }
-        stage('Sonarqube Analysis') {
+         stage('SonarQube Analysis') {
             steps {
-                dir('app-code/backend') {
-                    withSonarQubeEnv('sonar-server') {
-                        sh ''' 
-                            $SCANNER_HOME/bin/sonar-scanner \
-                            -Dsonar.projectKey=backend \
-                            -Dsonar.sources=. \
-                            -Dsonar.host.url=http://44.244.210.204:9000 \
-                            -Dsonar.login=sqp_5940b2eeea33d0e4f873243a7a1f988ab74dd112
-                        '''
-                    }
+                withSonarQubeEnv('sonar') {
+                    sh ''' 
+                        $SCANNER_HOME/bin/sonar-scanner \ 
+                            -Dsonar.projectName=three-tier-devsecops-Project \
+                            -Dsonar.projectKey=three-tier-devsecops-Project 
+                       '''
                 }
             }
         }
-        stage('Quality Check') {
+        stage('Quality Gate Check') {
             steps {
-                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
                 }
             }
         }
