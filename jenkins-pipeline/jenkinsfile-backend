@@ -22,15 +22,15 @@ pipeline {
                 git branch: 'main', credentialsId: 'GITHUB', url: 'https://github.com/codewithmuh/three-tier-devsecops-project.git'
             }
         }
-         stage('SonarQube Analysis') {
+        stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonar') {
-                    sh ''' 
-                    $SCANNER_HOME/bin/sonar-scanner \ 
-                    -Dsonar.projectName=three-tier-devsecops-Project \
-                    -Dsonar.projectKey=three-tier-devsecops-Project 
+                    sh '''
+                        $SCANNER_HOME/bin/sonar-scanner \
+                        -Dsonar.projectName=three-tier-devsecops-Project \
+                        -Dsonar.projectKey=three-tier-devsecops-Project
                     '''
-                }
+                 }
             }
         }
         stage('Quality Gate Check') {
